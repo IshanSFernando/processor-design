@@ -1,0 +1,157 @@
+Rcol = number of columns
+Rrow = number of rows
+Rj=1
+R1=1
+R2=2
+R3=3
+
+LOAD1 Rcol	AC1<--Rcol
+INCAC1 		AC1<--AC1+1
+INCAC1		AC1<--AC1+1		
+INCAC1		AC1<--AC1+1
+STORE1R Ri      Ri<--AC1
+
+Ri = col +3
+
+_____________________________________________________
+Rtotal=0    ---  Address T
+LOAD1 Ri
+ADD1 Rcol
+ADD1 R1
+STORE1R Raddress
+LDAC1R Raddress
+STORE1R Rtotal
+
+LOAD1 Ri
+ADD1 Rcol
+ADD1 R2
+STORE1R Raddress
+LDAC1R Raddress
+MUL1 2
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+ADD1 Rcol
+ADD1 R2
+ADD1 R1
+STORE1R Raddress
+LDAC1R Raddress
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+ADD1 R1
+STORE1R Raddress
+LDAC1R Raddress
+MUL1 2
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+STORE1R Raddress
+LDAC1R Raddress
+MUL1 4
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+SUB1 R1
+STORE1R Raddress
+LDAC1R Raddress
+MUL1 2
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+SUB1 Rcol
+SUB1 R3
+STORE1R Raddress
+LDAC1R Raddress
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+SUB1 Rcol
+SUB1 R2
+STORE1R Raddress
+LDAC1R Raddress
+MUL1 2
+ADD1 Rtotal
+STORE1R Rtotal
+
+LOAD1 Ri
+SUB1 Rcol
+SUB1 R1
+STORE1R Raddress
+LDAC1R Raddress
+ADD1 Rtotal
+STORE1R Rtotal
+
+
+LOAD1 Rtotal
+DIV1 16
+STACR1 Ri
+
+LOAD1 Ri
+ADD1 R2
+STORE1R Ri
+
+LOAD1 Rj
+ADD1 R1
+STORE1R Rj
+
+if col is even:
+	LOAD1 Rcol
+	DIV1 2
+	SUB1 Rj
+	if AC1 negative:
+		LOAD1 Ri
+		ADD1 Rcol
+		ADD1 R3
+		ADD1 R1
+		STORE1R Ri
+
+		LOAD1 R1
+		STORE1R Rj
+
+if col is odd:
+	LOAD1 Rcol
+	SUB1 R1
+	DIV1 2
+	ADD1 R1
+	SUB1 Rj
+	if AC1 negative:
+		LOAD1 Ri
+		ADD1 Rcol
+		ADD1 R3
+		STORE1R Ri
+
+		LOAD1 R1
+		STORE1R Rj
+
+		
+LOAD1 Rcol
+LOAD2 Rrow
+ADD1 R2
+ADD2 R2
+MULAC2
+STORE1R Rtemp
+SUB2 Rtemp
+SUB2 R1
+LOAD1 Ri
+if AC2>AC1:
+	z=0
+JUMPZ T
+
+
+	
+
+	
+		
+		
+		
+		
+	
+
+
