@@ -1,157 +1,149 @@
-Rcol = number of columns
-Rrow = number of rows
-Rj=1
-R1=1
-R2=2
-R3=3
+Rcol = register store the number of columns  
+Rrow =  register store the number of rows
 
-LOAD1 Rcol	AC1<--Rcol
-INCAC1 		AC1<--AC1+1
-INCAC1		AC1<--AC1+1		
-INCAC1		AC1<--AC1+1
-STORE1R Ri      Ri<--AC1
+CLAC                                   initialize all register to zero
 
-Ri = col +3
+IMM (number_of_col)
+STORE1R Rcol
 
-_____________________________________________________
-Rtotal=0    ---  Address T
+IMM (number_of_row)
+STORE1R Rrow
+
+LOAD1 Rcol  	AC1<--Rcol
+INC3AC1 		AC1<--AC1+3 (newly added to ISA)
+STORE1R Ri      Ri<--AC1 	(Ri = col +3)
+
+IMM 1
+STORE1R Rj  				(Rj = 1)
+
+------- calculate the while loop boundary -------------
+
+LOAD1 Rcol
+INC2AC1
+STORE1R RcolTemp           (col+2)
+LOAD1 Rrow
+INC2AC1
+MUL1R RcolTemp        ((col+2)*(row+2))
+SUB1 Rcol
+DEC3AC1
+STORE1R Rbnd       (store while loop boundary value)
+
+_______________________while loop______________________________
 LOAD1 Ri
 ADD1 Rcol
 ADD1 R1
 STORE1R Raddress
 LDAC1R Raddress
-STORE1R Rtotal
+STORE1R Rtotal         (Rtotal = c)
 
 LOAD1 Ri
 ADD1 Rcol
-ADD1 R2
+INC2AC1 
 STORE1R Raddress
 LDAC1R Raddress
 MUL1 2
 ADD1 Rtotal
-STORE1R Rtotal
+STORE1R Rtotal    (Rtotal=c+a)
 
 LOAD1 Ri
 ADD1 Rcol
-ADD1 R2
-ADD1 R1
+INC3AC1 
 STORE1R Raddress
 LDAC1R Raddress
 ADD1 Rtotal
-STORE1R Rtotal
+STORE1R Rtotal           (c=c+im[i+1+col+2])
 
 LOAD1 Ri
-ADD1 R1
+DEC1AC1      
 STORE1R Raddress
 LDAC1R Raddress
 MUL1 2
-ADD1 Rtotal
-STORE1R Rtotal
+ADD1 Rtotal               (c=c+a)
+STORE1R Rtotal          
 
 LOAD1 Ri
 STORE1R Raddress
 LDAC1R Raddress
-MUL1 4
+MUL1 4                    a=4*im[i]
 ADD1 Rtotal
-STORE1R Rtotal
+STORE1R Rtotal            (c=c+a)
 
 LOAD1 Ri
-SUB1 R1
+INC1AC1 
 STORE1R Raddress
 LDAC1R Raddress
+MUL1 2                    a=2*im[i+1]
+ADD1 Rtotal
+STORE1R Rtotal            
+
+LOAD1 Ri
+SUB1 Rcol
+DEC3AC1
+STORE1R Raddress
+LDAC1R Raddress
+ADD1 Rtotal
+STORE1R Rtotal          c=c+im[i-1-col-2]
+
+LOAD1 Ri
+SUB1 Rcol
+DEC2AC1
+STORE1R Raddress
+LDAC1R Raddress           a=2*im[i-col-2]
 MUL1 2
 ADD1 Rtotal
-STORE1R Rtotal
+STORE1R Rtotal         
 
 LOAD1 Ri
 SUB1 Rcol
-SUB1 R3
+DEC1AC1
 STORE1R Raddress
 LDAC1R Raddress
 ADD1 Rtotal
-STORE1R Rtotal
-
-LOAD1 Ri
-SUB1 Rcol
-SUB1 R2
-STORE1R Raddress
-LDAC1R Raddress
-MUL1 2
-ADD1 Rtotal
-STORE1R Rtotal
-
-LOAD1 Ri
-SUB1 Rcol
-SUB1 R1
-STORE1R Raddress
-LDAC1R Raddress
-ADD1 Rtotal
-STORE1R Rtotal
+STORE1R Rtotal                c=c+im[i+1-col-2]
 
 
 LOAD1 Rtotal
 DIV1 16
-STACR1 Ri
+STACR1 Ri                     im[i]=c/16
 
 LOAD1 Ri
-ADD1 R2
-STORE1R Ri
+INC2AC1   
+STORE1R Ri                    i=i+2
 
 LOAD1 Rj
-ADD1 R1
-STORE1R Rj
+INC1AC1 
+STORE1R Rj                    j=j+1
 
-if col is even:
+JUMPLSB (now + 12):
 	LOAD1 Rcol
 	DIV1 2
 	SUB1 Rj
-	if AC1 negative:
+	JUMPNEG (now+8):
 		LOAD1 Ri
 		ADD1 Rcol
-		ADD1 R3
-		ADD1 R1
-		STORE1R Ri
+		INC3AC1 
+		INC1AC1 
+		STORE1R Ri              i=i+col+4
 
-		LOAD1 R1
-		STORE1R Rj
+		IMM 1
+		STORE1R Rj              j=1
 
-if col is odd:
+JUMPNLSB (now + 12):
 	LOAD1 Rcol
-	SUB1 R1
 	DIV1 2
-	ADD1 R1
+	INC1AC1 
 	SUB1 Rj
-	if AC1 negative:
+	JUMPNEG (now+7):
 		LOAD1 Ri
 		ADD1 Rcol
-		ADD1 R3
-		STORE1R Ri
+		INC3AC1 
+		STORE1R Ri             i=i+col+3
 
-		LOAD1 R1
+		IMM 1
 		STORE1R Rj
 
 		
-LOAD1 Rcol
-LOAD2 Rrow
-ADD1 R2
-ADD2 R2
-MULAC2
-STORE1R Rtemp
-SUB2 Rtemp
-SUB2 R1
 LOAD1 Ri
-if AC2>AC1:
-	z=0
-JUMPZ T
-
-
-	
-
-	
-		
-		
-		
-		
-	
-
-
+SUB1 Rbnd
+JUMPNEG (loop_start_address)
+exit from program

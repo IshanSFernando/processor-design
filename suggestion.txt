@@ -1,0 +1,11 @@
+**** namal ****
+addressing mode need to be decide. basically problem with 2 optioins
+1. memory direct addressing
+2. indirect register addressing
+
+1. memory direct addressing
+memory address is 16 bit log. so instruction lenght will be incresed unnecessary.
+
+2. indirect register addressing
+each time we have to load the memory address to a known register before doing any operation.
+
