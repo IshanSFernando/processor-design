@@ -13,6 +13,6 @@ always @(posedge clk)
 	begin
 		if (write) store <= din;
 		if (read2) dout2 <= store;
-        if (read1) dout1 <= {9'b0,store}
+        if (read1) dout1 <= {9'b0,store};
 	end
 endmodule
