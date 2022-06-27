@@ -1,11 +1,11 @@
 // general purpose registers
 
 module RX (
-    input clk;
-    input write;
-    input read;
-    input [17:0] din;
-    output reg[17:0] dout=18'b0;
+    input clk,
+    input write,
+    input read,
+    input [17:0] din,
+    output reg[17:0] dout=18'b0
 );
 
 reg [17:0] store=18'b0; // 18-bit register

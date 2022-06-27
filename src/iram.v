@@ -1,18 +1,18 @@
-module IRAM(
-input clk,
-input write,
-input read,
-input [8:0] instIn,
-input [8:0] addr,
-output reg [8:0] instOut
-);
+module IRAM(clk, read, din, addr, dout);
+input clk, read;
+input [8:0] din;
+input [8:0] addr;
+output reg [8:0] dout;
 
-reg [8:0] store [511:0]; // 9 bit size, 512 locations
+reg [8:0] iMem[511:0]; // 9 bit size, 512 locations
+
+initial begin
+	$readmemb("path-to-machine-code-file", iMem);
+end
 
 always @(posedge clk)
 	begin
-		if (write) store[addr] <= instIn;
-		if (read) instOut <= store[addr];
+		if (read) dout <= iMem[addr];
 	end
 
 endmodule
