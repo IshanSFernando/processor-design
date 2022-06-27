@@ -1,7 +1,6 @@
 Rcol = register store the number of columns  
 Rrow =  register store the number of rows
-
-CLAC                                   initialize all register to zero
+-------------------------------
 
 IMM (number_of_col)
 STORE1R Rcol
