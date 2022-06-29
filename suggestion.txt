@@ -1,1 +1,2 @@
 * effective assembly length : 226 
+* add a new instruction before each branching
