@@ -18,12 +18,12 @@ wire [8:0] pc_to_iar;
 
 parameter clk_period = 4'b1010;
 
-Poc_IRAM IRAM_DUT(
+IRAM IRAM_DUT(
     .addr(iar_to_iram_addr),
     .dout(imem_to_idr)
 );
 
-Poc_IDR IDR_DUT(
+IDR IDR_DUT(
     .clk(clk),
     .write(write_idr),
     .din(imem_to_idr),
@@ -31,7 +31,7 @@ Poc_IDR IDR_DUT(
     .dout2(dout2_idr)
 );
 
-PocIAR IAR_DUT(
+IAR IAR_DUT(
     .clk(clk),
     .inc(inc_iar),
     .write(write_iar),
@@ -39,7 +39,7 @@ PocIAR IAR_DUT(
     .dout(iar_to_iram_addr)
 );
 
-PocPC PC_DUT(
+PC PC_DUT(
     .clk(clk),
     .inc(inc_pc),
     .write(write_pc),
