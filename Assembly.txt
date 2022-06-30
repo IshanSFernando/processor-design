@@ -112,9 +112,8 @@ STORE1R Ri                    i=i+2
 LOAD1 Rj
 INC1AC1 
 STORE1R Rj                    j=j+1
-
-JUMPLSB (now + 12):
-	LOAD1 Rcol
+LOAD1 Rcol
+JUMPLSB (now + 13):
 	DIV1 2
 	SUB1 Rj
 	JUMPNEG (now+8):
@@ -126,9 +125,8 @@ JUMPLSB (now + 12):
 
 		IMM 1
 		STORE1R Rj              j=1
-
+LOAD1 Rcol
 JUMPNLSB (now + 12):
-	LOAD1 Rcol
 	DIV1 2
 	INC1AC1 
 	SUB1 Rj
@@ -142,7 +140,7 @@ JUMPNLSB (now + 12):
 		STORE1R Rj
 
 		
-LOAD1 Ri
-SUB1 Rbnd
-JUMPNEG (loop_start_address)
+LOAD1 Rbnd
+SUB1 Ri
+JUMPNNEG (loop_start_address)
 exit from program
