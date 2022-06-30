@@ -1,2 +1,3 @@
 * effective assembly length : 226 
-* add a new instruction before each branching
+* how to write memory data to a file
+* how to start/end execuation of processor
