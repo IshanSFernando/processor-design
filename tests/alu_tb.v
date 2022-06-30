@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Poc_ALU_tb;
+module ALU_tb;
 reg [17:0]alu_a, alu_b;
 reg clk;
 reg [3:0] alu_sel;
@@ -9,7 +9,7 @@ wire [17:0] alu_c;
 
 parameter clk_period = 4'b0110;
 
-Poc_ALU POC_ALU_DUT(
+ALU ALU_DUT(
     .clk(clk),
     .alu_sel(alu_sel),
     .a(alu_a),

@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 // alu a bus selection with a mux
-module Poc_mux_alu_a_tb;
+module mux_alu_a_tb;
 reg clk;
 
 reg write_idr;
@@ -26,7 +26,7 @@ parameter clk_period = 4'b1010;
 reg [2:0]select;
 wire [17:0] alu_a_bus;
 
-Poc_IDR IDR_DUT2(
+IDR IDR_DUT2(
     .clk(clk),
     .write(write_idr),
     .din(din_idr),
@@ -34,28 +34,28 @@ Poc_IDR IDR_DUT2(
     .dout2(dout2_idr)
 );
 
-Poc_MDR MDR_DUT(
+MDR MDR_DUT(
     .clk(clk),
     .write(write_mdr),
     .din(din_mdr),
     .dout(dout_mdr)
 );
 
-Poc_RX Rcol_DUT(
+RX Rcol_DUT(
     .clk(clk),
     .write(write_rcol),
     .din(din_rcol),
     .dout(dout_rcol)
 );
 
-Poc_RX Rrow_DUT(
+RX Rrow_DUT(
     .clk(clk),
     .write(write_rrow),
     .din(din_rrow),
     .dout(dout_rrow)
 );
 
-Poc_ALU_Mux_A ALU_MUX_A_DUT(
+ALU_Mux_A ALU_MUX_A_DUT(
     .select(select),
     .dout1_idr(dout1_idr),
     .dout_mdr(dout_mdr),

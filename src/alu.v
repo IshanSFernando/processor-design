@@ -23,6 +23,7 @@ always @(posedge clk) begin
     4'b1011: c <= b*a;
     4'b1100: c <= b/a;
     4'b1101: c <= {a[8:0],b[8:0]};
+    default: c <= c;
     endcase
 end
 
