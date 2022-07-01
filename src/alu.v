@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Poc_ALU(
+module ALU(
     input clk,
     input [3:0] alu_sel,
     input [17:0] a,b,
