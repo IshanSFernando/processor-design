@@ -1,3 +1,1 @@
 * effective assembly length : 226 
-* how to write memory data to a file
-* how to start/end execuation of processor
