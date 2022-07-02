@@ -1,38 +1,21 @@
 `timescale 1ns / 1ps
 
 module Top(
-    input clk,
-    input inc_pc, write_pc, write_iar, inc_iar, write_idr, write_ir, write_tr,
-    write_dram, off_dram, write_mar, write1_mdr, write2_mdr, write_ac,
-   
-    input [3:0] ctrlunit_to_decoder,
-    input [3:0] select_mux_a,
-    input [1:0] select_mux_b,   
-    input [3:0] alu_sel,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-    output lsb,neg,
-    output [8:0] dout_ir
+    input clk
 );
 
 // PC
-//wire inc_pc,write_pc;
 wire [8:0]  pc_to_iar;
 
 // IAR
-//wire write_iar,inc_iar;
 wire [8:0] iar_to_iram ;
 
 // IDR
-//wire write_idr;
-//wire [17:0] dout1_idr;
 wire [8:0]  idr2_to_pc_tr_ir;
-
-// TR
-//wire inc_tr, write_tr;
-//wire [17:0] dout_tr;
 
 // IR
 //wire write_ir;
-//wire [8:0] dout_ir;
+wire [8:0] ir_to_ctrlunit;
     
 // IRAM
 wire [8:0] iram_to_idr;
@@ -42,13 +25,8 @@ wire [8:0] mdr_to_dram;
 wire [17:0] mar_to_dram;
 wire [8:0] dram_to_mdr;
 
-// MAR
-
-// MDR
-
 
 // ALU_MUX_A
-// reg [3:0] select_mux_a;
 wire [17:0] idr_to_muxa, mdr_to_muxa, rcol_to_muxa, rrow_to_muxa, 
 ri_to_muxa, rj_to_muxa, rtotal_to_muxa, address_to_muxa, rbnd_to_muxa, rcoltemp_to_muxa;
 wire [17:0] muxa_to_alu;
@@ -59,29 +37,33 @@ wire  [17:0] muxb_to_alu;
 
 // ALU
 wire [17:0] alu_c;
+wire lsb,neg;
 
 // decoder for special purpose registers
 wire [7:0] decoder_to_sreg_signals;
 
+// Control unil
+wire [35:0] all_ctrl_signals;
+
 PC PC(
     .clk(clk),
-    .write(write_pc),
-    .inc(inc_pc),
+    .write(all_ctrl_signals[26]),
+    .inc(all_ctrl_signals[11]),
     .din(idr2_to_pc_tr_ir),
     .dout(pc_to_iar)
 );
 
 IAR IAR(
     .clk(clk),
-    .write(write_iar),
-    .inc(inc_iar),
+    .write(all_ctrl_signals[25]),
+    .inc(all_ctrl_signals[12]),
     .din(pc_to_iar),
     .dout(iar_to_iram)
 );
 
 IDR IDR(
     .clk(clk),
-    .write(write_idr),
+    .write(all_ctrl_signals[18]),
     .din(iram_to_idr),
     .dout1(idr_to_muxa),
     .dout2(idr2_to_pc_tr_ir)
@@ -89,16 +71,16 @@ IDR IDR(
 
 TR TR(
     .clk(clk),
-    .write(write_tr),
+    .write(all_ctrl_signals[24]),
     .din(idr2_to_pc_tr_ir),
     .dout(tr_to_muxb)
 );
 
 IR IR(
     .clk(clk),
-    .write(write_ir),
+    .write(all_ctrl_signals[23]),
     .din(idr2_to_pc_tr_ir),
-    .dout(dout_ir)
+    .dout(ir_to_ctrlunit)
 );
 
 IRAM IRAM(
@@ -108,8 +90,8 @@ IRAM IRAM(
 
 DRAM DRAM(
     .clk(clk),
-    .write(write_dram),
-    .off(off_dram),
+    .write(all_ctrl_signals[13]),
+    .off(all_ctrl_signals[0]),
     .din(mdr_to_dram),
     .addr(mar_to_dram),
     .dout(dram_to_mdr) 
@@ -117,15 +99,15 @@ DRAM DRAM(
 
 MAR MAR(
     .clk(clk),
-    .write(write_mar),
+    .write(all_ctrl_signals[22]),
     .din(alu_c),
     .dout(mar_to_dram)
 );
 
 MDR MDR(
     .clk(clk),
-    .write1(write1_mdr),
-    .write2(write2_mdr),
+    .write1(all_ctrl_signals[21]),
+    .write2(all_ctrl_signals[20]),
     .din1(dram_to_mdr),
     .din2(alu_c),
     .dout1(mdr_to_dram),
@@ -134,7 +116,7 @@ MDR MDR(
 
 AC AC(
     .clk(clk),
-    .write(write_ac),
+    .write(all_ctrl_signals[19]),
     .din(alu_c),
     .dout(ac_to_muxb)
 );
@@ -196,7 +178,7 @@ RX Rcoltemp(
 );
 
 ALU_Mux_A ALU_Mux_A(
-    .select(select_mux_a),
+    .select(all_ctrl_signals[6:3]),
     .dout1_idr(idr_to_muxa), 
     .dout_mdr(mdr_to_muxa), 
     .dout_rcol(rcol_to_muxa), 
@@ -211,7 +193,7 @@ ALU_Mux_A ALU_Mux_A(
 );
 
 ALU_Mux_B ALU_Mux_B(
-    .select(select_mux_b),
+    .select(all_ctrl_signals[2:1]),
     .dout_tr(tr_to_muxb), 
     .dout_ac(ac_to_muxb),
     .alu_b(muxb_to_alu)
@@ -219,7 +201,7 @@ ALU_Mux_B ALU_Mux_B(
 
 ALU ALU(
     .clk(clk),
-    .alu_sel(alu_sel),
+    .alu_sel(all_ctrl_signals[10:7]),
     .a(muxa_to_alu),
     .b(muxb_to_alu),
     .c(alu_c),
@@ -228,8 +210,17 @@ ALU ALU(
 );
 
 SRegister_Decoder  SRegister_Decoder(
-    .sel(ctrlunit_to_decoder),
+    .sel(all_ctrl_signals[17:14]),
     .sreg_wr_ctrl_signals(decoder_to_sreg_signals)
+);
+
+control_unit control_unit(
+    .clk(clk),
+    .N_flag(neg),
+    .lsb(lsb),
+    .addr(all_ctrl_signals[35:27]),
+    .IR(ir_to_ctrlunit),
+    .MIR(all_ctrl_signals)
 );
 
 endmodule
