@@ -7,7 +7,7 @@ wire [8:0] dram_to_mdr;
 
 reg write_mdr;
 
-reg [18:0]din_mar;
+reg [17:0]din_mar;
 reg write_mar;
 wire [17:0] mar_to_dram;
 
