@@ -2,9 +2,9 @@
 
 module ALU_Mux_A(
     input [3:0] select,
-    input [18:0] dout1_idr, dout_mdr, 
-    dout_rcol, dout_rrow, dout_ri, dout_rj, dout_rtotal, dout_address, dout_rbnd,
-    output [18:0] alu_a
+    input [17:0] dout1_idr, dout_mdr, 
+    dout_rcol, dout_rrow, dout_ri, dout_rj, dout_rtotal, dout_address, dout_rbnd, dout_rcoltemp,
+    output [17:0] alu_a
 );
 
 parameter 
@@ -17,7 +17,8 @@ ri_sel   = 4'b0101,
 rj_sel   = 4'b0110,
 rtotal_sel   = 4'b0111,
 raddress_sel = 4'b1000,
-rbnd_sel     = 4'b1001;
+rbnd_sel     = 4'b1001,
+rcoltemp_sel = 4'b1010;
 
 assign alu_a = (select == idr1_sel)? dout1_idr:
                (select == mdr_sel)? dout_mdr:
@@ -28,5 +29,6 @@ assign alu_a = (select == idr1_sel)? dout1_idr:
                (select == rtotal_sel)? dout_rtotal:
                (select == raddress_sel)? dout_address:
                (select == rbnd_sel)? dout_rbnd:
+               (select == rcoltemp_sel)? dout_rcoltemp:
                default_sel;
 endmodule 
