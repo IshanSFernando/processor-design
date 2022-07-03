@@ -8,7 +8,6 @@ module ALU_Mux_A(
 );
 
 parameter 
-default_sel = 4'b0000,
 idr1_sel = 4'b0001,
 mdr_sel  = 4'b0010,
 rcol_sel = 4'b0011,
@@ -30,5 +29,5 @@ assign alu_a = (select == idr1_sel)? dout1_idr:
                (select == raddress_sel)? dout_address:
                (select == rbnd_sel)? dout_rbnd:
                (select == rcoltemp_sel)? dout_rcoltemp:
-               default_sel;
+               18'b0;
 endmodule 
