@@ -7,11 +7,10 @@ module ALU_Mux_B(
 );
 
 parameter 
-default_sel = 2'b00,
 tr_sel = 2'b01,
 ac_sel = 2'b10;
 
 assign alu_b = (select == tr_sel)? dout_tr:
                (select == ac_sel)? dout_ac:
-               default_sel;
+               18'b0;
 endmodule 

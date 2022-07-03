@@ -1,26 +1,27 @@
 import numpy as np
 from PIL import Image
+import cv2 
 
-image = np.array(Image.open('test.png').convert('L'))
+
+image = np.array(Image.open('path-to-original-image').convert('L'))
 col=len(image[0])
 row=len(image)
 
 if col>256:
     col = 256
-    img = Image.open('test.png').convert('L')
+    img = Image.open('path-to-original-image').convert('L')
     wpercent = (col / float(img.size[0]))
     row = int((float(img.size[1]) * float(wpercent)))
 elif row>256:
     row = 256
-    img = Image.open('test.png').convert('L')
+    img = Image.open('path-to-original-image').convert('L')
     hpercent = (row / float(img.size[1]))
     col = int((float(img.size[0]) * float(hpercent)))
 
-print(row,col)
 
 bnd=(col+2)*(row+2)
 
-f = open('wrong_sunday_1.txt', 'r')
+f = open('image-in-binary-file', 'r')
 Lines = f.readlines()
 
 im=[]
@@ -56,3 +57,11 @@ downsampled=np.array(downsampled)
 ##print(downsampled.shape)
 gr_im= Image.fromarray(downsampled).convert('P').save('downsampled.png')
 print(downsampled.shape)
+
+original = cv2.imread("path-to-original-image")
+down_sampled_image = cv2.imread("downsampled.png")
+
+cv2.imshow("down_sampled image",down_sampled_image)
+cv2.imshow("original image",original)
+cv2.waitKey(0) 
+cv2.destroyAllWindows() 

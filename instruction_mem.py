@@ -4,6 +4,7 @@ registers={"Rcol":"000000001","Rrow":"000000010",
            "Ri":"000000011","Rj":"000000100","Rtotal":"000000101","Raddress":"000000110","Rbnd":"000000111","RcolTemp":"000001000"}
 other={"C":256,"R":159,"1":1,"188":188,"210":210,"32":32,"2":2,"4":4,"16":16}
 
+
 list1=[]
 
 with open('Reduced_Assembly.txt', 'r') as file:
@@ -14,9 +15,8 @@ with open('Reduced_Assembly.txt', 'r') as file:
         for word in line.split():
             # displaying the words
             list1.append(word)
-print(list1)
 
-with open('InstructionMemory.txt', 'w') as f:
+with open('InstructionMemory_smile_cat.txt', 'w') as f:
     for elements in list1:
         if elements in instruction_dic:
             f.write('{0:09b}\n'.format(instruction_dic[elements]))
@@ -28,3 +28,4 @@ with open('InstructionMemory.txt', 'w') as f:
             f.write('{0:09b}'.format(75))
         else:
             f.write("-------"+str(elements)+"-----------")
+
