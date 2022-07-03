@@ -1,28 +1,34 @@
 import numpy as np
 from PIL import Image
 
-image = np.array(Image.open('test.jpg').convert('L'))
+image = np.array(Image.open('test.png').convert('L'))
 col=len(image[0])
 row=len(image)
 
 if col>256:
     col = 256
-    img = Image.open('test.jpg').convert('L')
+    img = Image.open('test.png').convert('L')
     wpercent = (col / float(img.size[0]))
     row = int((float(img.size[1]) * float(wpercent)))
 elif row>256:
     row = 256
-    img = Image.open('test.jpg').convert('L')
+    img = Image.open('test.png').convert('L')
     hpercent = (row / float(img.size[1]))
     col = int((float(img.size[0]) * float(hpercent)))
 
-f = open('processed.txt', 'r')
+print(row,col)
+
+bnd=(col+2)*(row+2)
+
+f = open('wrong_sunday_1.txt', 'r')
 Lines = f.readlines()
-print(len(Lines))
+
 im=[]
 
-for l in Lines:
-    im.append(int(l[:9],2))
+for i in range (bnd):
+    im.append(int(Lines[i][:9],2))
+
+
 
 temp=[]
 downsampled=[]
@@ -49,3 +55,4 @@ while i<((col+2)*(row+2))-(col+2)-1:
 downsampled=np.array(downsampled)
 ##print(downsampled.shape)
 gr_im= Image.fromarray(downsampled).convert('P').save('downsampled.png')
+print(downsampled.shape)
