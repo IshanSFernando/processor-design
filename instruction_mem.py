@@ -2,7 +2,8 @@ instruction_dic={"FETCH":0,"LDAC":4,"LDACR":11,"LOAD":18,"STORER":22,"STACR":25,
                   "IMM":56,"MULR":59,"JUMPLSB":63,"JUMPNLSB":67,"JUMPNNEG":71}
 registers={"Rcol":"000000001","Rrow":"000000010",
            "Ri":"000000011","Rj":"000000100","Rtotal":"000000101","Raddress":"000000110","Rbnd":"000000111","RcolTemp":"000001000"}
-other={"C":256,"R":256,"1":1,"188":188,"210":210,"32":32,"2":2,"4":4,"16":16}
+other={"C":256,"R":159,"1":1,"188":188,"210":210,"32":32,"2":2,"4":4,"16":16}
+
 
 list1=[]
 
@@ -27,3 +28,4 @@ with open('InstructionMemory_smile_cat.txt', 'w') as f:
             f.write('{0:09b}'.format(75))
         else:
             f.write("-------"+str(elements)+"-----------")
+
